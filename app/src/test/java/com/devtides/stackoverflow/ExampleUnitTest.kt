@@ -1,4 +1,4 @@
-package com.devtides.stackoverflowquery
+package com.devtides.stackoverflow
 
 import org.junit.Test
 

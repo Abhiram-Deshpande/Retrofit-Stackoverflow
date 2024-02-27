@@ -32,7 +32,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingRight="8dp"
-                android:visibility="gone"
                 android:text="Score"
                 style="@style/Score"/>
 
@@ -42,7 +41,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:visibility="gone"
                 android:text="Date"
                 style="@style/Date"/>
         </LinearLayout>
