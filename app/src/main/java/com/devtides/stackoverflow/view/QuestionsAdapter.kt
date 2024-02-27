@@ -1,14 +1,15 @@
 package com.devtides.stackoverflow.view
 
 import android.view.LayoutInflater
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.devtides.stackoverflow.R
+import com.devtides.stackoverflow.databinding.QuestionLayoutBinding
 import com.devtides.stackoverflow.model.Question
 import com.devtides.stackoverflow.model.convertTitle
 import com.devtides.stackoverflow.model.getDate
-import kotlinx.android.synthetic.main.question_layout.view.*
 import java.util.Date
 
 class QuestionsAdapter(val questions: ArrayList<Question>): RecyclerView.Adapter<QuestionsAdapter.AdapterViewHolder>() {
@@ -26,7 +27,7 @@ class QuestionsAdapter(val questions: ArrayList<Question>): RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         AdapterViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.question_layout, parent, false)
+            QuestionLayoutBinding.inflate(LayoutInflater.from(parent.context))
         )
 
     override fun getItemCount() = questions.size
@@ -35,10 +36,10 @@ class QuestionsAdapter(val questions: ArrayList<Question>): RecyclerView.Adapter
         holder.bind(questions[position])
     }
 
-    class AdapterViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val title = view.item_title
-        val score = view.item_score
-        val date = view.item_date
+    class AdapterViewHolder(binding: QuestionLayoutBinding): RecyclerView.ViewHolder(binding.root) {
+        val title = binding.itemTitle
+        val score = binding.itemScore
+        val date =  binding.itemDate
 
         fun bind(question: Question) {
             title.text = convertTitle(question.title)

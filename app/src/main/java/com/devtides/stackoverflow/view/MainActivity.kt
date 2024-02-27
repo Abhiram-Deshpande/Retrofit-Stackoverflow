@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.devtides.stackoverflow.R
+import com.devtides.stackoverflow.databinding.ActivityMainBinding
 import com.devtides.stackoverflow.viewmodel.QuestionsViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
+
+    private lateinit var binding:ActivityMainBinding
     private val questionsAdapter = QuestionsAdapter(arrayListOf())
     private val viewModel: QuestionsViewModel by viewModels()
     private val lm = LinearLayoutManager(this)
@@ -22,9 +24,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        this.binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        questions_list.apply {
+        binding.questionsList.apply {
             layoutManager = lm
             adapter = questionsAdapter
             addOnScrollListener(object : OnScrollListener(){
@@ -34,8 +37,8 @@ class MainActivity : AppCompatActivity() {
                     if(dy>0){
                         val childCount = questionsAdapter.itemCount
                         val lastPosition = lm.findLastCompletelyVisibleItemPosition()
-                        if(childCount -1 == lastPosition && loading_view.visibility == View.GONE){
-                            loading_view.visibility = View.VISIBLE
+                        if(childCount -1 == lastPosition && binding.loadingView.visibility == View.GONE){
+                            binding.loadingView.visibility = View.VISIBLE
                             viewModel.getNextPage()
                         }
                     }
@@ -46,11 +49,11 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
 
         viewModel.getNextPage()
-        swipe_layout.setOnRefreshListener {
+        binding.swipeLayout.setOnRefreshListener {
             questionsAdapter.clearQuestions()
             viewModel.getFirstPage()
-            loading_view.visibility = View.VISIBLE
-            questions_list.visibility = View.GONE
+            binding.loadingView.visibility = View.VISIBLE
+            binding.questionsList.visibility = View.GONE
         }
     }
 
@@ -58,23 +61,23 @@ class MainActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.questionsResponse.observe(this, Observer { items ->
             items?.let {
-                questions_list.visibility = View.VISIBLE
-                swipe_layout.isRefreshing = false
+                binding.questionsList.visibility = View.VISIBLE
+                binding.swipeLayout.isRefreshing = false
                 questionsAdapter.addQuestions(it)
             }
         })
 
         viewModel.error.observe(this, Observer { errorMsg ->
-            list_error.visibility = if (errorMsg == null) View.GONE else View.VISIBLE
-            list_error.text = "Error\n$errorMsg"
+            binding.listError.visibility = if (errorMsg == null) View.GONE else View.VISIBLE
+            binding.listError.text = "Error\n$errorMsg"
         })
 
         viewModel.loading.observe(this, Observer { isLoading ->
             isLoading?.let {
-                loading_view.visibility = if (it) View.VISIBLE else View.GONE
+                binding.loadingView.visibility = if (it) View.VISIBLE else View.GONE
                 if (it) {
-                    list_error.visibility = View.GONE
-                    questions_list.visibility = View.GONE
+                    binding.listError.visibility = View.GONE
+                    binding.questionsList.visibility = View.GONE
                 }
             }
         })
