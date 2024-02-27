@@ -13,8 +13,9 @@ class DetailsActivity : AppCompatActivity() {
         val PARAM_QUESTION = "params_question"
 
         fun getIntent(context: Context, question: Question) =
-            Intent(context,DetailsActivity::class.java).putExtra(PARAM_QUESTION,question)
+//            Intent(context,DetailsActivity::class.java).putExtra(PARAM_QUESTION,question)
 
+            //TODO : Make Question class parcelable
     }
 
     var question:Question?=null
